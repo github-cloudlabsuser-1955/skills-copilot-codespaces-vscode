@@ -1,0 +1,28 @@
+name: Email Report
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # Runs daily at 6 a.m. UTC
+
+jobs:
+  email-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to access the report file
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Send the email with the report
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.example.com # Replace with your SMTP server
+          server_port: 587                 # Replace with your SMTP port
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Daily Report"
+          body: "Please find the attached report."
+          to: recipient@example.com        # Replace with recipient email
+          from: sender@example.com         # Replace with sender email
+          attachments: report.txt          # Replace with the path to your report file
